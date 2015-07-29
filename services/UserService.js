@@ -148,11 +148,52 @@ exports.deleteUserSchedule = function (req, res) {
     });
 };
 
-/* WatchRound */
-/*
-router.get("/:id/watchround", UserService.findUserWatchRound);
-router.post("/:id/watchround", UserService.addUserWatchRound);
 
-router.put("/:id/watchround", UserService.updateUserWatchRound);
-router.delete("/:id/watchround", UserService.deleteUserWatchRound);
-*/
+/**
+ *  ===============================
+ *  ==== WATCHROUND OPERATIONS ====
+ *  ===============================
+ */
+
+// Find an User's watch round
+exports.findUserWatchRound = function (req, res) {
+    "use strict";
+    User.findById(req.params.id, function (err, user) {
+        if (err) {
+            return res.status(500).send(err.message);
+        }
+        res.status(200).jsonp(user.watchRound);
+    });
+};
+
+// Update an User's watch round
+exports.updateUserWatchRound = function (req, res) {
+    "use strict";
+    console.log(req.body);
+    console.log(req.params.id);
+
+    User.findById(req.params.id, function (err, user) {
+        user.watchRound = req.body.watchRound;
+
+        user.save(function (err) {
+            if (err) {
+                return res.status(500).send(err.message);
+            }
+            res.status(200).jsonp(user);
+        });
+    });
+};
+
+// Delete an User's watch round
+exports.deleteUserWatchRound = function (req, res) {
+    "use strict";
+    User.findById(req.params.id, function (err, user) {
+        user.watchRound = -1;
+        user.save(function (err) {
+            if (err) {
+                return res.status(500).send(err.message);
+            }
+            res.status(200).jsonp(true);
+        });
+    });
+};

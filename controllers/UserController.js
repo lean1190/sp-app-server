@@ -21,11 +21,9 @@ router.put("/:id/schedule", UserService.updateUserSchedule);
 router.delete("/:id/schedule", UserService.deleteUserSchedule);
 
 /* WatchRound */
-/*router.get("/:id/watchround", UserService.findUserWatchRound);
-router.post("/:id/watchround", UserService.addUserWatchRound);
-
+router.get("/:id/watchround", UserService.findUserWatchRound);
 router.put("/:id/watchround", UserService.updateUserWatchRound);
-router.delete("/:id/watchround", UserService.deleteUserWatchRound);*/
+router.delete("/:id/watchround", UserService.deleteUserWatchRound);
 
 
 module.exports = router;
