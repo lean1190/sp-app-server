@@ -4,32 +4,22 @@
 
 var express = require("express");
 var mongoose = require("mongoose");
-var fs = require("fs");
+var Q = require("q");
 var path = require("path");
 var logger = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 
-// ===== MODELS BOOTSTRAP
-
-var modelsPath = __dirname + "/models";
-fs.readdirSync(modelsPath).forEach(function (file) {
-    "use strict";
-    if (~file.indexOf(".js")) {
-        require(modelsPath + "/" + file);
-    }
-});
-
 // ===== ROUTING DEFINITIONS
 
-var commonRoutes = require("./controllers/CommonController");
-var usersRoutes = require("./controllers/UserController");
+var commonRoutes = require("./routers/CommonRouter");
+var usersRoutes = require("./routers/UserRouter");
 
 // ===== DATABASE CONNECTIOn
 
 mongoose.connect("mongodb://localhost/sp-app-db");
 var db = mongoose.connection;
-db.on("error", console.error.bind(console, ":: DB CONNECTION ERROR :"));
+db.on("error", console.error.bind(console, "MongoDB - CONNECTION ERROR"));
 db.once("open", function () {
     "use strict";
     console.log("MongoDB - CONNECTION OK");
@@ -57,6 +47,8 @@ app.use(function (req, res, next) {
     err.status = 404;
     next(err);
 });
+
+Q.longStackSupport = true;
 
 // ===== ERROR HANDLERS
 
