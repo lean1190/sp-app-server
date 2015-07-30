@@ -4,6 +4,7 @@
 
 var mongoose = require("mongoose");
 var User = mongoose.model("User");
+var UserService = {};
 
 /**
  *  ===============================
@@ -12,7 +13,7 @@ var User = mongoose.model("User");
  */
 
 // Return all users
-exports.findAll = function (req, res) {
+UserService.findAll = function (req, res) {
     "use strict";
     User.find(function (err, users) {
         if (err) {
@@ -24,7 +25,7 @@ exports.findAll = function (req, res) {
 
 
 // Return a User with specified ID
-exports.findById = function (req, res) {
+UserService.findById = function (req, res) {
     "use strict";
     User.findById(req.params.id, function (err, user) {
         if (err) {
@@ -35,7 +36,7 @@ exports.findById = function (req, res) {
 };
 
 // Return a User with specified name
-exports.findByName = function (req, res) {
+UserService.findByName = function (req, res) {
     "use strict";
     User.find({
         name: req.body.name
@@ -48,7 +49,7 @@ exports.findByName = function (req, res) {
 };
 
 // Add a new User
-exports.addUser = function (req, res) {
+UserService.addUser = function (req, res) {
     "use strict";
     console.log(req.body);
 
@@ -69,7 +70,7 @@ exports.addUser = function (req, res) {
 };
 
 // Update an existing User
-exports.updateUser = function (req, res) {
+UserService.updateUser = function (req, res) {
     "use strict";
     User.findById(req.params.id, function (err, user) {
         user.name = req.body.name;
@@ -86,7 +87,7 @@ exports.updateUser = function (req, res) {
 };
 
 // Delete a User with specified ID
-exports.deleteUser = function (req, res) {
+UserService.deleteUser = function (req, res) {
     "use strict";
     User.findById(req.params.id, function (err, user) {
         user.remove(function (err) {
@@ -106,7 +107,7 @@ exports.deleteUser = function (req, res) {
  */
 
 // Find an User's schedule
-exports.findUserSchedule = function (req, res) {
+UserService.findUserSchedule = function (req, res) {
     "use strict";
     User.findById(req.params.id, function (err, user) {
         if (err) {
@@ -117,7 +118,7 @@ exports.findUserSchedule = function (req, res) {
 };
 
 // Update an User's schedule
-exports.updateUserSchedule = function (req, res) {
+UserService.updateUserSchedule = function (req, res) {
     "use strict";
     console.log(req.body);
     console.log(req.params.id);
@@ -135,7 +136,7 @@ exports.updateUserSchedule = function (req, res) {
 };
 
 // Delete an User's schedule
-exports.deleteUserSchedule = function (req, res) {
+UserService.deleteUserSchedule = function (req, res) {
     "use strict";
     User.findById(req.params.id, function (err, user) {
         user.schedule = [];
@@ -156,7 +157,7 @@ exports.deleteUserSchedule = function (req, res) {
  */
 
 // Find an User's watch round
-exports.findUserWatchRound = function (req, res) {
+UserService.findUserWatchRound = function (req, res) {
     "use strict";
     User.findById(req.params.id, function (err, user) {
         if (err) {
@@ -167,7 +168,7 @@ exports.findUserWatchRound = function (req, res) {
 };
 
 // Update an User's watch round
-exports.updateUserWatchRound = function (req, res) {
+UserService.updateUserWatchRound = function (req, res) {
     "use strict";
     console.log(req.body);
     console.log(req.params.id);
@@ -185,7 +186,7 @@ exports.updateUserWatchRound = function (req, res) {
 };
 
 // Delete an User's watch round
-exports.deleteUserWatchRound = function (req, res) {
+UserService.deleteUserWatchRound = function (req, res) {
     "use strict";
     User.findById(req.params.id, function (err, user) {
         user.watchRound = -1;
@@ -197,3 +198,5 @@ exports.deleteUserWatchRound = function (req, res) {
         });
     });
 };
+
+module.exports = UserService;
