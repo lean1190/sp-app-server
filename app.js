@@ -1,35 +1,37 @@
-/*jshint bitwise: false, camelcase: true, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true*/
+/* jshint bitwise: false, camelcase: true, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true */
 
 /* globals console, require, module, __dirname */
 
-var express = require("express");
-var mongoose = require("mongoose");
-var Q = require("q");
-var path = require("path");
-var logger = require("morgan");
-var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
+var express = require("express"),
+    cors = require("cors"),
+    mongoose = require("mongoose"),
+    Q = require("q"),
+    path = require("path"),
+    logger = require("morgan"),
+    cookieParser = require("cookie-parser"),
+    bodyParser = require("body-parser"),
+    app = express();
 
 // ===== ROUTING DEFINITIONS
 
 var commonRoutes = require("./routers/CommonRouter");
 var usersRoutes = require("./routers/UserRouter");
 
-// ===== DATABASE CONNECTIOn
+// ===== DATABASE CONNECTION
 
 mongoose.connect("mongodb://localhost/sp-app-db");
 var db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB - CONNECTION ERROR"));
+db.on("error", console.error.bind(console, "[ERROR] - MongoDB: CONNECTION ERROR"));
 db.once("open", function () {
     "use strict";
-    console.log("MongoDB - CONNECTION OK");
+    console.log("[INFO] - MongoDB: CONNECTION OK");
 });
 
 // ===== MIDDLEWARE SETUP
 
-var app = express();
-
 app.use(logger("dev"));
+// ALLOW CORS
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
@@ -37,6 +39,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// == ROUTES SETUP
 app.use("/", commonRoutes);
 app.use("/users", usersRoutes);
 

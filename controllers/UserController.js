@@ -21,6 +21,7 @@ var userQuerier = new GenericMongooseWrapper("User", "../models/User");
 UserController.findAll = function (req, res) {
     "use strict";
     userQuerier.find().then(function (users) {
+        console.log(":: USERS: ", users);
         res.status(200).jsonp(users);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -31,6 +32,7 @@ UserController.findAll = function (req, res) {
 UserController.findById = function (req, res) {
     "use strict";
     userQuerier.findById(req.params.id).then(function (user) {
+        console.log(":: USER: ", user);
         res.status(200).jsonp(user);
     }, function (err) {
         return res.status(500).send(err.message);
