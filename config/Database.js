@@ -4,6 +4,13 @@
 
 var mongoose = require("mongoose");
 
+/**
+ * A MongoDB database instantiation wrapper
+ * Connects the database and prints the result
+ *
+ * @param settings an object with the database connection url (at least for now)
+ * e.g. { connectionUrl : "mongodb://localhost/mongo-db" }
+ */
 var database = function Database(settings) {
     "use strict";
     this.settings = settings;

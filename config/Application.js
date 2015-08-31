@@ -9,6 +9,16 @@ var express = require("express"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser");
 
+/**
+ * The main express application constructor, setups the middleware
+ * and the routes, with proper error handlers
+ *
+ * @param publicSettings an object with the path and the name for the public folder
+ * e.g. {path: __dirname, folder: "public"}
+ *
+ * @param routers an array of objects with the route path and the router handler
+ * e.g. [ {route: "/", handler: CommonRouter}, {route: "/users", handler: UserRouter} ]
+ */
 var app = function Application(publicSettings, routers) {
     "use strict";
     var expressApp = express();

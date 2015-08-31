@@ -6,18 +6,27 @@ var session = require("express-session"),
     passport = require("passport"),
     GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
+/**
+ * Configure a passport instance with the Google Strategy
+ *
+ * @param settings an object with the passport configurations
+ * e.g. { sessionSecret: "key", googleClientId: "10166.apps.google.com", googleClientSecret: "X3iM38L", authCallbackUrl: "http://127.0.0.1:3000/auth/google/callback" }
+ */
 var passportConfigured = function Passport(settings) {
     "use strict";
 
     this.settings = settings;
-    // Google OAuth2 config
-    this.GOOGLE_CLIENT_ID = "10166761084-0vrr8qe7vr4rkqmjpelucqdukehh1jt8.apps.googleusercontent.com";
-    this.GOOGLE_CLIENT_SECRET = "X3iM38LRMqhI6nIFnqAZKxre";
 
+    /**
+     * Initialize the app with the required passport configuration
+     *
+     * @param app an express application
+     */
     this.register = function (app) {
+
         // Session config
         app.use(session({
-            secret: this.settings.secret,
+            secret: this.settings.sessionSecret,
             resave: false,
             saveUninitialized: false
         }));
@@ -36,18 +45,15 @@ var passportConfigured = function Passport(settings) {
         });
 
         // Use the GoogleStrategy within Passport.
-        //   Strategies in Passport require a `verify` function, which accept
-        //   credentials (in this case, an accessToken, refreshToken, and Google
-        //   profile), and invoke a callback with a user object.
         passport.use(new GoogleStrategy({
-                clientID: this.GOOGLE_CLIENT_ID,
-                clientSecret: this.GOOGLE_CLIENT_SECRET,
+                clientID: this.settings.googleClientId,
+                clientSecret: this.settings.googleClientSecret,
                 callbackURL: this.settings.authCallbackUrl
             },
             function (accessToken, refreshToken, profile, done) {
                 console.log(": profile", profile);
                 console.log(": done", done);
-                return;
+                done(null, profile);
             }
         ));
 

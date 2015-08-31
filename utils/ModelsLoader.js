@@ -6,6 +6,11 @@ var fs = require("fs");
 
 var ModelsLoader = {};
 
+/**
+ * Requires all the models under some path
+ *
+ * @param modelsPath the folder path where the models are located
+ */
 ModelsLoader.load = function (modelsPath) {
     "use strict";
     fs.readdirSync(modelsPath).forEach(function (file) {
