@@ -99,6 +99,15 @@ UserController.deleteUser = function (req, res) {
     });
 };
 
+// Find or create a user based on its Google id
+UserController.findOrCreateUser = function (googleId) {
+    "use strict";
+
+    User.findOne(googleId, function(err, user) {
+
+    });
+};
+
 
 /**
  *  ===============================

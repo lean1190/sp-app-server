@@ -2,9 +2,16 @@
 
 /* globals console, module, require */
 
+require("../models/User");
+
 var session = require("express-session"),
     passport = require("passport"),
-    GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+    GoogleStrategy = require("passport-google-oauth").OAuth2Strategy,
+    mongoose = require("mongoose"),
+
+    UserController = require("../controllers/UserController"),
+    // User model to deserialize it
+    User = mongoose.model("User");
 
 /**
  * Configure a passport instance with the Google Strategy
@@ -32,16 +39,14 @@ var passportConfigured = function Passport(settings) {
         }));
 
         // Passport session setup.
-        //   To support persistent login sessions, Passport needs to be able to
-        //   serialize users into and deserialize users out of the session.  Typically,
-        //   this will be as simple as storing the user ID when serializing, and finding
-        //   the user by ID when deserializing.
         passport.serializeUser(function (user, done) {
-            done(null, user);
+            done(null, user.id);
         });
 
-        passport.deserializeUser(function (obj, done) {
-            done(null, obj);
+        passport.deserializeUser(function (id, done) {
+            User.findById( id, function (err, user) {
+                done(err, user);
+            });
         });
 
         // Use the GoogleStrategy within Passport.
@@ -52,8 +57,12 @@ var passportConfigured = function Passport(settings) {
             },
             function (accessToken, refreshToken, profile, done) {
                 console.log(": profile", profile);
-                console.log(": done", done);
-                done(null, profile);
+                UserController.findOrCreateUser(profile.id).then(function () {
+                    done(null, profile);
+                },
+                function() {
+
+                });
             }
         ));
 
