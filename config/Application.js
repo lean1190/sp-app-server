@@ -7,7 +7,8 @@ var express = require("express"),
     path = require("path"),
     logger = require("morgan"),
     cookieParser = require("cookie-parser"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    Passport = require("./Passport");
 
 /**
  * The main express application constructor, setups the middleware
@@ -24,17 +25,30 @@ var app = function Application(publicSettings, routers) {
     var expressApp = express();
 
     // Middleware setup
-    expressApp.use(logger("dev"));
-    expressApp.use(cors());
+    // -------------------------
+    // MUST BE IN THIS ORDER! =S
+    // -------------------------
+    expressApp.use(express.static(path.join(publicSettings.path, publicSettings.folder)));
+    expressApp.use(cookieParser());
     expressApp.use(bodyParser.json());
     expressApp.use(bodyParser.urlencoded({
         extended: false
     }));
-    expressApp.use(cookieParser());
-    expressApp.use(express.static(path.join(publicSettings.path, publicSettings.folder)));
+
+    // ===== PASSPORT SETUP with Google OAuth2
+    var passport = new Passport({
+        sessionSecret: "some random and not easy key",
+        googleClientId: "10166761084-0vrr8qe7vr4rkqmjpelucqdukehh1jt8.apps.googleusercontent.com",
+        googleClientSecret: "X3iM38LRMqhI6nIFnqAZKxre",
+        authCallbackUrl: "http://127.0.0.1:3000/auth/google/callback"
+    });
+    passport.register(expressApp);
+
+    expressApp.use(logger("dev"));
+    expressApp.use(cors());
 
     // Setup the custom routes
-    for(var i = 0; i < routers.length; i++) {
+    for (var i = 0; i < routers.length; i++) {
         var router = routers[i];
         expressApp.use(router.route, router.handler);
     }
