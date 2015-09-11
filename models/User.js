@@ -6,9 +6,11 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
+    googleId: Number,
     name: String,
     phone: String,
     email: String,
+    profilePhoto: String,
 
     // Guardia 1,2,3..etc segun como va rotando el telefono
     watchRound: Number,

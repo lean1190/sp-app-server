@@ -2,14 +2,9 @@
 
 /* globals require, module, console */
 
-require("../models/User");
-
-var mongoose = require("mongoose");
-var User = mongoose.model("User");
-var GenericMongooseWrapper = require("../utils/GenericMongooseWrapper");
+var UserService = require("../services/UserService");
 
 var UserController = {};
-var userQuerier = new GenericMongooseWrapper("User", "../models/User");
 
 /**
  *  ===============================
@@ -20,7 +15,7 @@ var userQuerier = new GenericMongooseWrapper("User", "../models/User");
 // Return all users
 UserController.findAll = function (req, res) {
     "use strict";
-    userQuerier.find().then(function (users) {
+    UserService.findAll().then(function (users) {
         res.status(200).jsonp(users);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -30,7 +25,7 @@ UserController.findAll = function (req, res) {
 // Return a User with specified ID
 UserController.findById = function (req, res) {
     "use strict";
-    userQuerier.findById(req.params.id).then(function (user) {
+    UserService.findById(req.params.id).then(function (user) {
         res.status(200).jsonp(user);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -40,7 +35,7 @@ UserController.findById = function (req, res) {
 // Return a User with specified name
 UserController.findByName = function (req, res) {
     "use strict";
-    userQuerier.find({
+    UserService.find({
         name: req.params.name
     }).then(function (user) {
         res.status(200).jsonp(user);
@@ -54,15 +49,13 @@ UserController.addUser = function (req, res) {
     "use strict";
     console.log(req.body);
 
-    var newUser = new User({
+    var reqUser = {
         name: req.body.name,
         phone: req.body.phone,
-        email: req.body.email,
-        watchRound: -1,
-        schedule: []
-    });
+        email: req.body.email
+    };
 
-    userQuerier.save(newUser).then(function (user) {
+    UserService.save(reqUser).then(function (user) {
         res.status(200).jsonp(user);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -73,16 +66,17 @@ UserController.addUser = function (req, res) {
 UserController.updateUser = function (req, res) {
     "use strict";
 
-    userQuerier.findById(req.params.id).then(function (user) {
-        user.name = req.body.name || user.name;
-        user.phone = req.body.phone || user.phone;
-        user.email = req.body.email || user.email;
+    var reqUser = {
+        id: req.params.id,
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email
+    };
 
-        userQuerier.save(user).then(function (user) {
-            res.status(200).jsonp(user);
-        }, function (err) {
-            return res.status(500).send(err.message);
-        });
+    UserService.updateUser(reqUser).then(function (user) {
+        res.status(200).jsonp(user);
+    }, function (err) {
+        return res.status(500).send(err.message);
     });
 };
 
@@ -90,24 +84,13 @@ UserController.updateUser = function (req, res) {
 UserController.deleteUser = function (req, res) {
     "use strict";
 
-    userQuerier.findById(req.params.id).then(function (user) {
-        userQuerier.remove(user).then(function () {
-            res.status(200).jsonp(true);
-        }, function (err) {
-            return res.status(500).send(err.message);
-        });
+    UserService.deleteUser(req.params.id).then(function () {
+        res.status(200).jsonp(true);
+    }, function (err) {
+        return res.status(500).send(err.message);
     });
+
 };
-
-// Find or create a user based on its Google id
-UserController.findOrCreateUser = function (googleId) {
-    "use strict";
-
-    User.findOne(googleId, function(err, user) {
-
-    });
-};
-
 
 /**
  *  ===============================
@@ -118,7 +101,7 @@ UserController.findOrCreateUser = function (googleId) {
 // Find an User's schedule
 UserController.findUserSchedule = function (req, res) {
     "use strict";
-    User.findById(req.params.id, function (err, user) {
+    UserService.findUserSchedule(req.params.id, function (err, user) {
         if (err) {
             return res.status(500).send(err.message);
         }
@@ -132,7 +115,7 @@ UserController.updateUserSchedule = function (req, res) {
     console.log(req.body);
     console.log(req.params.id);
 
-    User.findById(req.params.id, function (err, user) {
+    UserService.findById(req.params.id, function (err, user) {
         user.schedule = req.body.schedule;
 
         user.save(function (err) {
@@ -147,7 +130,7 @@ UserController.updateUserSchedule = function (req, res) {
 // Delete an User's schedule
 UserController.deleteUserSchedule = function (req, res) {
     "use strict";
-    User.findById(req.params.id, function (err, user) {
+    UserService.findById(req.params.id, function (err, user) {
         user.schedule = [];
         user.save(function (err) {
             if (err) {
@@ -168,7 +151,7 @@ UserController.deleteUserSchedule = function (req, res) {
 // Find an User's watch round
 UserController.findUserWatchRound = function (req, res) {
     "use strict";
-    User.findById(req.params.id, function (err, user) {
+    UserService.findById(req.params.id, function (err, user) {
         if (err) {
             return res.status(500).send(err.message);
         }
@@ -182,7 +165,7 @@ UserController.updateUserWatchRound = function (req, res) {
     console.log(req.body);
     console.log(req.params.id);
 
-    User.findById(req.params.id, function (err, user) {
+    UserService.findById(req.params.id, function (err, user) {
         user.watchRound = req.body.watchRound;
 
         user.save(function (err) {
@@ -197,7 +180,7 @@ UserController.updateUserWatchRound = function (req, res) {
 // Delete an User's watch round
 UserController.deleteUserWatchRound = function (req, res) {
     "use strict";
-    User.findById(req.params.id, function (err, user) {
+    UserService.findById(req.params.id, function (err, user) {
         user.watchRound = -1;
         user.save(function (err) {
             if (err) {

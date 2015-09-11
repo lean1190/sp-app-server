@@ -2,16 +2,10 @@
 
 /* globals console, module, require */
 
-require("../models/User");
-
 var session = require("express-session"),
     passport = require("passport"),
     GoogleStrategy = require("passport-google-oauth").OAuth2Strategy,
-    mongoose = require("mongoose"),
-
-    UserController = require("../controllers/UserController"),
-    // User model to deserialize it
-    User = mongoose.model("User");
+    UserService = require("../services/UserService");
 
 /**
  * Configure a passport instance with the Google Strategy
@@ -44,7 +38,7 @@ var passportConfigured = function Passport(settings) {
         });
 
         passport.deserializeUser(function (id, done) {
-            User.findById( id, function (err, user) {
+            UserService.findById( id, function (err, user) {
                 done(err, user);
             });
         });
@@ -55,12 +49,13 @@ var passportConfigured = function Passport(settings) {
                 clientSecret: this.settings.googleClientSecret,
                 callbackURL: this.settings.authCallbackUrl
             },
-            function (accessToken, refreshToken, profile, done) {
-                console.log(": profile", profile);
-                UserController.findOrCreateUser(profile.id).then(function () {
-                    done(null, profile);
+            function (accessToken, refreshToken, googleProfile, done) {
+                console.log(": profile", googleProfile);
+                console.log(": email", googleProfile.emails);
+                UserService.findOrCreateUser(googleProfile).then(function () {
+                    done(null, googleProfile);
                 },
-                function() {
+                function(err) {
 
                 });
             }
