@@ -34,7 +34,7 @@ var passportConfigured = function Passport(settings) {
 
         // Passport session setup.
         passport.serializeUser(function (user, done) {
-            done(null, user.id);
+            done(null, user._id);
         });
 
         passport.deserializeUser(function (id, done) {
@@ -50,13 +50,11 @@ var passportConfigured = function Passport(settings) {
                 callbackURL: this.settings.authCallbackUrl
             },
             function (accessToken, refreshToken, googleProfile, done) {
-                console.log(": profile", googleProfile);
-                console.log(": email", googleProfile.emails);
-                UserService.findOrCreateUser(googleProfile).then(function () {
-                    done(null, googleProfile);
+                UserService.findOrCreateUserWithGoogleProfile(googleProfile, accessToken, refreshToken).then(function (user) {
+                    done(null, user);
                 },
                 function(err) {
-
+                    console.log("wtf happened?!");
                 });
             }
         ));

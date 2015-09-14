@@ -40,7 +40,7 @@ var app = function Application(publicSettings, routers) {
         sessionSecret: "some random and not easy key",
         googleClientId: "10166761084-0vrr8qe7vr4rkqmjpelucqdukehh1jt8.apps.googleusercontent.com",
         googleClientSecret: "X3iM38LRMqhI6nIFnqAZKxre",
-        authCallbackUrl: "http://127.0.0.1:3000/auth/google/callback"
+        authCallbackUrl: "http://localhost:3000/auth/google/callback"
     });
     passport.register(expressApp);
 

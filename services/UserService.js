@@ -21,32 +21,23 @@ var UserService = {};
 // Return all users
 UserService.findAll = function () {
     "use strict";
-    userQuerier.find().then(function (users) {
-        return users;
-    }, function (err) {
-        return err;
-    });
+
+    return userQuerier.find();
 };
 
 // Return a User with specified ID
 UserService.findById = function (userId) {
     "use strict";
-    userQuerier.findById(userId).then(function (user) {
-        return user;
-    }, function (err) {
-        return err;
-    });
+
+    return userQuerier.findById(userId);
 };
 
 // Return a User with specified name
 UserService.findByName = function (name) {
     "use strict";
-    userQuerier.find({
+
+    return userQuerier.find({
         name: name
-    }).then(function (user) {
-        return user;
-    }, function (err) {
-        return err;
     });
 };
 
@@ -54,18 +45,13 @@ UserService.findByName = function (name) {
 UserService.addUser = function (reqUser) {
     "use strict";
 
-    var newUser = new User({
-        googleId: reqUser.googleId,
-        name: reqUser.name,
-        phone: reqUser.phone,
-        email: reqUser.email,
-        watchRound: -1,
-        schedule: []
-    });
+    reqUser.watchRound = -1;
+    reqUser.schedule = [];
+    var newUser = new User(reqUser);
 
-    userQuerier.save(newUser).then(function (user) {
-        return user;
-    }, function (err) {
+    return userQuerier.save(newUser).then(function(user) {
+        return user[0];
+    }, function(err) {
         return err;
     });
 };
@@ -79,11 +65,7 @@ UserService.updateUser = function (reqUser) {
         user.phone = reqUser.phone || user.phone;
         user.email = reqUser.email || user.email;
 
-        userQuerier.save(user).then(function (user) {
-            return user;
-        }, function (err) {
-            return err;
-        });
+        return userQuerier.save(user);
     });
 };
 
@@ -101,24 +83,25 @@ UserService.deleteUser = function (userId) {
 };
 
 // Find or create a user based on its Google id
-UserService.findOrCreateUser = function (googleProfile) {
+UserService.findOrCreateUserWithGoogleProfile = function (googleProfile, accessToken, refreshToken) {
     "use strict";
 
-    userQuerier.find({
+    return userQuerier.findOne({
         googleId: googleProfile.id
     }).then(function (user) {
         if (utilsHelper.isEmpty(user)) {
-            UserService.addUser({
+            return UserService.addUser({
                 googleId: googleProfile.id,
                 name: googleProfile.displayName,
                 phone: 15444999,
-                email: googleProfile.emails[0].value
-            }).then(function (newUser) {
-                user = newUser;
+                email: googleProfile.emails[0].value,
+                profilePhoto: googleProfile.photos[0].value,
+                accessToken: accessToken,
+                refreshToken: refreshToken
             });
+        } else {
+            return user;
         }
-
-        return user;
     }, function (err) {
         return err;
     });

@@ -20,6 +20,15 @@ GenericMongooseWrapper.prototype.find = function (query, fields, options) {
     return (Q.denodeify(this.model.find.bind(this.model)))(query, fields, options);
 };
 
+GenericMongooseWrapper.prototype.findOne = function (query, fields, options) {
+    "use strict";
+    query = query || {};
+    fields = fields || {};
+    options = options || {};
+
+    return (Q.denodeify(this.model.findOne.bind(this.model)))(query, fields, options);
+};
+
 GenericMongooseWrapper.prototype.findById = function (id) {
     "use strict";
     return (Q.denodeify(this.model.findById.bind(this.model)))(id);

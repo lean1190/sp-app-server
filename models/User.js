@@ -12,6 +12,9 @@ var UserSchema = new Schema({
     email: String,
     profilePhoto: String,
 
+    accessToken: String,
+    refreshToken: String,
+
     // Guardia 1,2,3..etc segun como va rotando el telefono
     watchRound: Number,
 

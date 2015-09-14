@@ -47,7 +47,6 @@ UserController.findByName = function (req, res) {
 // Add a new User
 UserController.addUser = function (req, res) {
     "use strict";
-    console.log(req.body);
 
     var reqUser = {
         name: req.body.name,
@@ -55,7 +54,7 @@ UserController.addUser = function (req, res) {
         email: req.body.email
     };
 
-    UserService.save(reqUser).then(function (user) {
+    UserService.addUser(reqUser).then(function (user) {
         res.status(200).jsonp(user);
     }, function (err) {
         return res.status(500).send(err.message);

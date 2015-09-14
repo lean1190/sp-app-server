@@ -35,7 +35,7 @@ router.get("/google",
  */
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/" }), function (req, res) {
     "use strict";
-    res.redirect("/");
+    res.status(200).jsonp(true);
 });
 
 router.get("/logout", function (req, res) {
