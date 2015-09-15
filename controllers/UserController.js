@@ -111,12 +111,13 @@ UserController.findUserSchedule = function (req, res) {
 // Update an User's schedule
 UserController.updateUserSchedule = function (req, res) {
     "use strict";
-    console.log(req.body);
-    console.log(req.params.id);
 
-    UserService.findById(req.params.id, function (err, user) {
+    console.log("llegamos al controller");
+    UserService.findById(req.params.id).then( function (user) {
+        console.log("recuperando schedule");
         user.schedule = req.body.schedule;
 
+        console.log("antes del save.. q mierda pasa");
         user.save(function (err) {
             if (err) {
                 return res.status(500).send(err.message);
@@ -129,7 +130,7 @@ UserController.updateUserSchedule = function (req, res) {
 // Delete an User's schedule
 UserController.deleteUserSchedule = function (req, res) {
     "use strict";
-    UserService.findById(req.params.id, function (err, user) {
+    UserService.findById(req.params.id).then(function (user) {
         user.schedule = [];
         user.save(function (err) {
             if (err) {

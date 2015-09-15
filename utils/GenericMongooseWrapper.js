@@ -31,6 +31,7 @@ GenericMongooseWrapper.prototype.findOne = function (query, fields, options) {
 
 GenericMongooseWrapper.prototype.findById = function (id) {
     "use strict";
+    console.log("devolviendo id desde el wrapper...");
     return (Q.denodeify(this.model.findById.bind(this.model)))(id);
 };
 

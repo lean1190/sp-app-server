@@ -51,7 +51,7 @@ var passportConfigured = function Passport(settings) {
             },
             function (accessToken, refreshToken, googleProfile, done) {
                 UserService.findOrCreateUserWithGoogleProfile(googleProfile, accessToken, refreshToken).then(function (user) {
-                    done(null, user);
+                    return done(null, user);
                 },
                 function(err) {
                     console.log("wtf happened?!");

@@ -10,13 +10,22 @@ var mongoose = require("mongoose"),
     userQuerier = new GenericMongooseWrapper("User", "../models/User"),
     utilsHelper = require("../utils/UtilsHelper");
 
-var UserService = {};
+var UserService = {},
+    self = UserService;
 
 /**
  *  ===============================
  *  ==== BASIC USER OPERATIONS ====
  *  ===============================
  */
+
+// Remove the image resize parameter after the extension
+// Google set it to the profile photo
+UserService.removeImageSize = function(imageUrl) {
+    var parametersPosition = imageUrl.indexOf('?');
+
+    return imageUrl.substring(0, parametersPosition != -1 ? parametersPosition : imageUrl.length);
+};
 
 // Return all users
 UserService.findAll = function () {
@@ -28,7 +37,7 @@ UserService.findAll = function () {
 // Return a User with specified ID
 UserService.findById = function (userId) {
     "use strict";
-
+    console.log("en el servicio.. buscando id");
     return userQuerier.findById(userId);
 };
 
@@ -90,12 +99,13 @@ UserService.findOrCreateUserWithGoogleProfile = function (googleProfile, accessT
         googleId: googleProfile.id
     }).then(function (user) {
         if (utilsHelper.isEmpty(user)) {
-            return UserService.addUser({
+            var profilePhoto = self.removeImageSize(googleProfile.photos[0].value);
+            return self.addUser({
                 googleId: googleProfile.id,
                 name: googleProfile.displayName,
                 phone: 15444999,
                 email: googleProfile.emails[0].value,
-                profilePhoto: googleProfile.photos[0].value,
+                profilePhoto: profilePhoto,
                 accessToken: accessToken,
                 refreshToken: refreshToken
             });
