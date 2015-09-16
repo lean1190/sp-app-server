@@ -37,7 +37,7 @@ UserService.findAll = function () {
 // Return a User with specified ID
 UserService.findById = function (userId) {
     "use strict";
-    console.log("en el servicio.. buscando id");
+
     return userQuerier.findById(userId);
 };
 
@@ -68,7 +68,6 @@ UserService.addUser = function (reqUser) {
 // Update an existing User
 UserService.updateUser = function (reqUser) {
     "use strict";
-
     userQuerier.findById(reqUser.id).then(function (user) {
         user.name = reqUser.name || user.name;
         user.phone = reqUser.phone || user.phone;
@@ -81,7 +80,6 @@ UserService.updateUser = function (reqUser) {
 // Delete a User with specified ID
 UserService.deleteUser = function (userId) {
     "use strict";
-
     userQuerier.findById(userId).then(function (user) {
         userQuerier.remove(user).then(function () {
             return true;
@@ -139,9 +137,6 @@ UserService.findUserSchedule = function (userId) {
 // Update an User's schedule
 UserService.updateUserSchedule = function (req, res) {
     "use strict";
-    console.log(req.body);
-    console.log(req.params.id);
-
     User.findById(req.params.id, function (err, user) {
         user.schedule = req.body.schedule;
 
@@ -189,9 +184,6 @@ UserService.findUserWatchRound = function (req, res) {
 // Update an User's watch round
 UserService.updateUserWatchRound = function (req, res) {
     "use strict";
-    console.log(req.body);
-    console.log(req.params.id);
-
     User.findById(req.params.id, function (err, user) {
         user.watchRound = req.body.watchRound;
 

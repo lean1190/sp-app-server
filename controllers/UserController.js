@@ -82,7 +82,6 @@ UserController.updateUser = function (req, res) {
 // Delete a User with specified ID
 UserController.deleteUser = function (req, res) {
     "use strict";
-
     UserService.deleteUser(req.params.id).then(function () {
         res.status(200).jsonp(true);
     }, function (err) {
@@ -111,13 +110,9 @@ UserController.findUserSchedule = function (req, res) {
 // Update an User's schedule
 UserController.updateUserSchedule = function (req, res) {
     "use strict";
-
-    console.log("llegamos al controller");
     UserService.findById(req.params.id).then( function (user) {
-        console.log("recuperando schedule");
         user.schedule = req.body.schedule;
 
-        console.log("antes del save.. q mierda pasa");
         user.save(function (err) {
             if (err) {
                 return res.status(500).send(err.message);
@@ -162,9 +157,6 @@ UserController.findUserWatchRound = function (req, res) {
 // Update an User's watch round
 UserController.updateUserWatchRound = function (req, res) {
     "use strict";
-    console.log(req.body);
-    console.log(req.params.id);
-
     UserService.findById(req.params.id, function (err, user) {
         user.watchRound = req.body.watchRound;
 
