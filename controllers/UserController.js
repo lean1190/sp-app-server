@@ -51,7 +51,9 @@ UserController.addUser = function (req, res) {
     var reqUser = {
         name: req.body.name,
         phone: req.body.phone,
-        email: req.body.email
+        email: req.body.email,
+        watchRound: req.body.watchRound,
+        schedule: req.body.schedule
     };
 
     UserService.addUser(reqUser).then(function (user) {
@@ -110,7 +112,7 @@ UserController.findUserSchedule = function (req, res) {
 // Update an User's schedule
 UserController.updateUserSchedule = function (req, res) {
     "use strict";
-    UserService.findById(req.params.id).then( function (user) {
+    UserService.findById(req.params.id).then(function (user) {
         user.schedule = req.body.schedule;
 
         user.save(function (err) {

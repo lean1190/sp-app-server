@@ -54,8 +54,9 @@ UserService.findByName = function (name) {
 UserService.addUser = function (reqUser) {
     "use strict";
 
-    reqUser.watchRound = -1;
-    reqUser.schedule = [];
+    reqUser.watchRound = reqUser.watchRound || -1;
+    reqUser.schedule = reqUser.schedule || [];
+
     var newUser = new User(reqUser);
 
     return userQuerier.save(newUser).then(function(user) {
@@ -72,6 +73,8 @@ UserService.updateUser = function (reqUser) {
         user.name = reqUser.name || user.name;
         user.phone = reqUser.phone || user.phone;
         user.email = reqUser.email || user.email;
+        user.watchRound = reqUser.watchRound || user.watchRound;
+        user.schedule = reqUser.schedule || user.schedule;
 
         return userQuerier.save(user);
     });
