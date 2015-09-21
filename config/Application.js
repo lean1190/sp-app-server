@@ -5,10 +5,11 @@
 var express = require("express"),
     cors = require("cors"),
     path = require("path"),
-    logger = require("morgan"),
+    morganLogger = require("morgan"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
-    Passport = require("./Passport");
+    Passport = require("./Passport"),
+    logger = require("../utils/Logger");
 
 /**
  * The main express application constructor, setups the middleware
@@ -44,7 +45,7 @@ var app = function Application(publicSettings, routers) {
     });
     passport.register(expressApp);
 
-    expressApp.use(logger("dev"));
+    expressApp.use(morganLogger("combined", { "stream": logger.stream }));
     expressApp.use(cors());
 
     // Setup the custom routes

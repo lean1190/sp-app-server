@@ -2,7 +2,8 @@
 
 /* globals console, module, require */
 
-var mongoose = require("mongoose");
+var mongoose = require("mongoose"),
+    logger = require("../utils/Logger");
 
 /**
  * A MongoDB database instantiation wrapper
@@ -19,7 +20,7 @@ var database = function Database(settings) {
         var connection = mongoose.connection;
         connection.on("error", console.error.bind(console, "[ERROR] - MongoDB: CONNECTION ERROR"));
         connection.once("open", function () {
-            console.log("[INFO] - MongoDB: CONNECTION OK");
+            logger.info("MongoDB: CONNECTION OK");
         });
     };
 };
