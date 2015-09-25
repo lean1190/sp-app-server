@@ -27,7 +27,27 @@ var UserSchema = new Schema({
         startHour: String,
         endHour: String
     }]
-
 });
+
+/**
+ * Return true if the user starts working at the
+ * day and hour passed as parameters
+ *
+ * @param day
+ * @param hour
+ * @return boolean
+ */
+UserSchema.methods.isInMySchedule = function (day, hour) {
+    "use strict";
+
+    for(var i = 0; i < this.schedule.length; i++) {
+        var scheduleEntry = this.schedule[i];
+        if (scheduleEntry.day === day && scheduleEntry.startHour === hour) {
+            return true;
+        }
+    }
+
+    return false;
+};
 
 module.exports = mongoose.model("User", UserSchema);
