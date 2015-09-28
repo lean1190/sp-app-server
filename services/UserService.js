@@ -21,7 +21,7 @@ var UserService = {},
 
 // Remove the image resize parameter after the extension
 // Google set it to the profile photo
-UserService.removeImageSize = function(imageUrl) {
+UserService.removeImageSize = function (imageUrl) {
     var parametersPosition = imageUrl.indexOf('?');
 
     return imageUrl.substring(0, parametersPosition != -1 ? parametersPosition : imageUrl.length);
@@ -59,9 +59,9 @@ UserService.addUser = function (reqUser) {
 
     var newUser = new User(reqUser);
 
-    return userQuerier.save(newUser).then(function(user) {
+    return userQuerier.save(newUser).then(function (user) {
         return user[0];
-    }, function(err) {
+    }, function (err) {
         return err;
     });
 };
@@ -163,6 +163,36 @@ UserService.deleteUserSchedule = function (req, res) {
             }
             res.status(200).jsonp(true);
         });
+    });
+};
+
+// Retrieve all users schedules
+UserService.findAllUsersSchedule = function () {
+    return UserService.findAll().then(function (users) {
+        var schedules = {},
+            days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"],
+            hours = [8, 9, 11];
+
+        for (var i = 0; i < days.length; i++) {
+            var day = days[i];
+            schedules[day] = {};
+            for (var j = 0; j < hours.length; j++) {
+                var hour = hours[j];
+                schedules[day][hour] = [];
+            }
+        }
+
+        users.forEach(function (currentUser) {
+            for (var i = 0; i < currentUser.schedule.length; i++) {
+                var scheduleEntry = currentUser.schedule[i];
+                schedules[scheduleEntry.day][scheduleEntry.startHour].push({
+                    name: currentUser.name,
+                    profilePhoto: currentUser.profilePhoto
+                });
+            }
+        });
+
+        return schedules;
     });
 };
 

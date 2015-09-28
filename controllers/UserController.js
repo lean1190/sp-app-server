@@ -89,7 +89,6 @@ UserController.deleteUser = function (req, res) {
     }, function (err) {
         return res.status(500).send(err.message);
     });
-
 };
 
 /**
@@ -138,6 +137,16 @@ UserController.deleteUserSchedule = function (req, res) {
     });
 };
 
+UserController.findAllUsersSchedule = function (req, res) {
+    "use strict";
+
+    UserService.findAllUsersSchedule().then(function (schedules) {
+        res.status(200).jsonp(schedules);
+    },
+    function (err) {
+        return res.status(500).send(err.message);
+    });
+};
 
 /**
  *  ===============================

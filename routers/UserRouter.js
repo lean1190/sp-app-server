@@ -2,9 +2,9 @@
 
 /* globals require, module */
 
-var express = require("express");
-var router = express.Router();
-var UserController = require("../controllers/UserController");
+var express = require("express"),
+    router = express.Router(),
+    UserController = require("../controllers/UserController");
 
 /* Basic user information */
 router.get("/", UserController.findAll);
@@ -20,6 +20,8 @@ router.get("/name/:name", UserController.findByName);
 router.get("/:id/schedule", UserController.findUserSchedule);
 router.put("/:id/schedule", UserController.updateUserSchedule);
 router.delete("/:id/schedule", UserController.deleteUserSchedule);
+
+router.get("/schedule/all", UserController.findAllUsersSchedule);
 
 /* WatchRound */
 router.get("/:id/watchround", UserController.findUserWatchRound);
