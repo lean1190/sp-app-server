@@ -69,7 +69,7 @@ UserService.addUser = function (reqUser) {
 // Update an existing User
 UserService.updateUser = function (reqUser) {
     "use strict";
-    userQuerier.findById(reqUser.id).then(function (user) {
+    return userQuerier.findById(reqUser.id).then(function (user) {
         user.name = reqUser.name || user.name;
         user.phone = reqUser.phone || user.phone;
         user.email = reqUser.email || user.email;
@@ -83,7 +83,7 @@ UserService.updateUser = function (reqUser) {
 // Delete a User with specified ID
 UserService.deleteUser = function (userId) {
     "use strict";
-    userQuerier.findById(userId).then(function (user) {
+    return userQuerier.findById(userId).then(function (user) {
         userQuerier.remove(user).then(function () {
             return true;
         }, function (err) {
