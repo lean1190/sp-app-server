@@ -12,7 +12,8 @@ var // Config modules
     UserRouter = require("./routers/UserRouter");
 
 // ===== DATABASE CONNECTION
-var db = new Database({ connectionUrl : "mongodb://localhost/sp-app-db" });
+//var db = new Database({ connectionUrl : "mongodb://localhost/sp-app-db" });
+var db = new Database({ connectionUrl : "mongodb://main:the123asdpassword@ds059702.mongolab.com:59702/sp-app-server" });
 db.connect();
 
 // ===== APP SETUP
