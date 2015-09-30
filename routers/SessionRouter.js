@@ -20,10 +20,11 @@ router.get("/google",
         ]
     }),
     function (req, res) {
-        "use strict";
-        console.log("whoops! Google login endpoint failed");
         // The request will be redirected to Google for authentication, so this
         // function will not be called.
+
+        "use strict";
+        console.log("whoops! Google login endpoint failed");
     }
 );
 

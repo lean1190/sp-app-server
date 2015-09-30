@@ -2,8 +2,8 @@
 
 /* globals require, module */
 
-var Q = require("q");
-var mongoose = require("mongoose");
+var Q = require("q"),
+    mongoose = require("mongoose");
 
 function GenericMongooseWrapper(modelName, schemaPath) {
     "use strict";

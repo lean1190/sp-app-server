@@ -54,7 +54,7 @@ var passportConfigured = function Passport(settings) {
                     return done(null, user);
                 },
                 function(err) {
-                    console.log("wtf happened?!");
+                    console.log("wtf happened?!", err);
                 });
             }
         ));

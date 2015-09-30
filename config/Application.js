@@ -1,4 +1,4 @@
-/* jshint bitwise: false, camelcase: true, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true */
+/* jshint bitwise: false, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true */
 
 /* globals require, module */
 
@@ -9,7 +9,8 @@ var express = require("express"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
     Passport = require("./Passport"),
-    logger = require("../utils/Logger");
+    logger = require("../utils/Logger"),
+    config = require("../utils/Config");
 
 /**
  * The main express application constructor, setups the middleware
@@ -38,10 +39,10 @@ var app = function Application(publicSettings, routers) {
 
     // ===== PASSPORT SETUP with Google OAuth2
     var passport = new Passport({
-        sessionSecret: "some random and not easy key",
-        googleClientId: "10166761084-0vrr8qe7vr4rkqmjpelucqdukehh1jt8.apps.googleusercontent.com",
-        googleClientSecret: "X3iM38LRMqhI6nIFnqAZKxre",
-        authCallbackUrl: "http://localhost:3000/auth/google/callback"
+        sessionSecret: config.session_secret,
+        googleClientId: config.google_client_id,
+        googleClientSecret: config.google_client_secret,
+        authCallbackUrl: config.google_callback_url
     });
     passport.register(expressApp);
 

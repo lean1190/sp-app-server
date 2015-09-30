@@ -2,29 +2,33 @@
 
 /* globals module, require */
 
-var winston = require("winston");
-winston.emitErrs = true;
+var Logger = Logger || (function () {
+    "use strict";
 
-var Logger = new winston.Logger({
-    transports: [
-        new winston.transports.File({
-            level: "error",
-            filename: "./logs/error-logs.log",
-            handleExceptions: true,
-            json: true,
-            maxsize: 5242880, //5MB
-            maxFiles: 5,
-            colorize: false
-        }),
-        new winston.transports.Console({
-            level: "debug",
-            handleExceptions: true,
-            json: false,
-            colorize: true
-        })
-    ],
-    exitOnError: false
-});
+    var winston = require("winston");
+    winston.emitErrs = true;
+
+    return new winston.Logger({
+        transports: [
+            new winston.transports.File({
+                level: "error",
+                filename: "./logs/error-logs.log",
+                handleExceptions: true,
+                json: true,
+                maxsize: 5242880, //5MB
+                maxFiles: 5,
+                colorize: false
+            }),
+            new winston.transports.Console({
+                level: "debug",
+                handleExceptions: true,
+                json: false,
+                colorize: true
+            })
+        ],
+        exitOnError: false
+    });
+}());
 
 module.exports = Logger;
 module.exports.stream = {

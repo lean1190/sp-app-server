@@ -22,9 +22,10 @@ var UserService = {},
 // Remove the image resize parameter after the extension
 // Google set it to the profile photo
 UserService.removeImageSize = function (imageUrl) {
-    var parametersPosition = imageUrl.indexOf('?');
+    "use strict";
+    var parametersPosition = imageUrl.indexOf("?");
 
-    return imageUrl.substring(0, parametersPosition != -1 ? parametersPosition : imageUrl.length);
+    return imageUrl.substring(0, parametersPosition !== -1 ? parametersPosition : imageUrl.length);
 };
 
 // Return all users
@@ -168,7 +169,9 @@ UserService.deleteUserSchedule = function (req, res) {
 
 // Retrieve all users schedules
 UserService.findAllUsersSchedule = function () {
-    return UserService.findAll().then(function (users) {
+    "use strict";
+
+    return self.findAll().then(function (users) {
         var schedules = {},
             days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"],
             hours = [8, 9, 11];

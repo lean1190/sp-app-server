@@ -6,21 +6,8 @@
 var UtilsHelper = UtilsHelper || (function () {
     "use strict";
 
-    // Create the main object that will be imported
+    // Create the main object that will be exported
     var trueUtilsHelper = trueUtilsHelper || {};
-
-    trueUtilsHelper.validarUsuario = function (usuario) {
-        var expregLetras = new RegExp("^[A-Z]{2}$");
-        var expregNumeros = new RegExp("^[0-9]{8}$");
-        var letras = usuario.substring(0, 2);
-        var numeros = usuario.substring(2, 10);
-
-        if ((!expregLetras.test(letras)) || (!expregNumeros.test(numeros))) {
-            return false;
-        }
-
-        return true;
-    };
 
     // Check if the object has a property, if so returns false
     trueUtilsHelper.isEmptyObject = function (object) {
@@ -41,11 +28,6 @@ var UtilsHelper = UtilsHelper || (function () {
     // Check if the string has the same length passed as parameter
     trueUtilsHelper.hasLength = function (string, length) {
         return (string.length === length);
-    };
-
-    // Check if the string has a dash "-" occurrence
-    trueUtilsHelper.hasDash = function (string) {
-        return (string.indexOf("-") >= 0);
     };
 
     return trueUtilsHelper;
