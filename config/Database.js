@@ -16,11 +16,12 @@ var database = function Database(settings) {
     "use strict";
     this.settings = settings;
     this.connect = function () {
-        mongoose.connect(this.settings.connectionUrl);
+        var connectionUrl = this.settings.connectionUrl;
+        mongoose.connect(connectionUrl);
         var connection = mongoose.connection;
         connection.on("error", console.error.bind(console, "[ERROR] - MongoDB: CONNECTION ERROR"));
         connection.once("open", function () {
-            logger.info("MongoDB: CONNECTION OK");
+            logger.info("MongoDB: CONNECTION OK - " + connectionUrl);
         });
     };
 };

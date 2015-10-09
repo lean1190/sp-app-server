@@ -15,9 +15,6 @@ var // Config modules
     config = require("./utils/Config");
 
 // ===== DATABASE CONNECTION
-//var db = new Database({ connectionUrl : "mongodb://localhost/sp-app-db" });
-//var db = new Database({ connectionUrl : "mongodb://main:the123asdpassword@ds059702.mongolab.com:59702/sp-app-server" });
-console.log("Database url:", config.database_url);
 var db = new Database({ connectionUrl : config.database_url });
 db.connect();
 
